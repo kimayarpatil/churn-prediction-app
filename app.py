@@ -7,11 +7,19 @@ import pandas as pd
 
 model = pickle.load(open("model.pkl", "rb"))
 
+# Page config
+
 st.set_page_config(page_title="Churn Predictor", layout="wide")
+
+# Title
 
 st.title("📊 Customer Churn Prediction Dashboard")
 
+# -------------------------
+
 # Sidebar Inputs
+
+# -------------------------
 
 st.sidebar.header("🧾 Enter Customer Details")
 
@@ -36,44 +44,54 @@ StreamingMovies = st.sidebar.selectbox("Streaming Movies", ["No", "Yes", "No int
 
 Contract = st.sidebar.selectbox("Contract Type", ["Month-to-month", "One year", "Two year"])
 PaperlessBilling = st.sidebar.selectbox("Paperless Billing", ["No", "Yes"])
-PaymentMethod = st.sidebar.selectbox("Payment Method", [
-"Electronic check", "Mailed check", "Bank transfer", "Credit card"
-])
+PaymentMethod = st.sidebar.selectbox(
+"Payment Method",
+["Electronic check", "Mailed check", "Bank transfer", "Credit card"]
+)
 
 MonthlyCharges = st.sidebar.number_input("Monthly Charges", min_value=0.0)
 TotalCharges = st.sidebar.number_input("Total Charges", min_value=0.0)
 
-# Encoding
+# -------------------------
+
+# Encoding Function
+
+# -------------------------
 
 def encode():
 return np.array([[
-1 if gender=="Male" else 0,
-1 if SeniorCitizen=="Yes" else 0,
-1 if Partner=="Yes" else 0,
-1 if Dependents=="Yes" else 0,
+1 if gender == "Male" else 0,
+1 if SeniorCitizen == "Yes" else 0,
+1 if Partner == "Yes" else 0,
+1 if Dependents == "Yes" else 0,
 tenure,
-1 if PhoneService=="Yes" else 0,
-{"No":0,"Yes":1,"No phone service":2}[MultipleLines],
-{"DSL":0,"Fiber optic":1,"No":2}[InternetService],
-{"No":0,"Yes":1,"No internet":2}[OnlineSecurity],
-{"No":0,"Yes":1,"No internet":2}[OnlineBackup],
-{"No":0,"Yes":1,"No internet":2}[DeviceProtection],
-{"No":0,"Yes":1,"No internet":2}[TechSupport],
-{"No":0,"Yes":1,"No internet":2}[StreamingTV],
-{"No":0,"Yes":1,"No internet":2}[StreamingMovies],
-{"Month-to-month":0,"One year":1,"Two year":2}[Contract],
-1 if PaperlessBilling=="Yes" else 0,
-{"Electronic check":0,"Mailed check":1,"Bank transfer":2,"Credit card":3}[PaymentMethod],
+1 if PhoneService == "Yes" else 0,
+{"No": 0, "Yes": 1, "No phone service": 2}[MultipleLines],
+{"DSL": 0, "Fiber optic": 1, "No": 2}[InternetService],
+{"No": 0, "Yes": 1, "No internet": 2}[OnlineSecurity],
+{"No": 0, "Yes": 1, "No internet": 2}[OnlineBackup],
+{"No": 0, "Yes": 1, "No internet": 2}[DeviceProtection],
+{"No": 0, "Yes": 1, "No internet": 2}[TechSupport],
+{"No": 0, "Yes": 1, "No internet": 2}[StreamingTV],
+{"No": 0, "Yes": 1, "No internet": 2}[StreamingMovies],
+{"Month-to-month": 0, "One year": 1, "Two year": 2}[Contract],
+1 if PaperlessBilling == "Yes" else 0,
+{"Electronic check": 0, "Mailed check": 1, "Bank transfer": 2, "Credit card": 3}[PaymentMethod],
 MonthlyCharges,
 TotalCharges
 ]])
 
-# Prediction
+# -------------------------
+
+# Prediction Button
+
+# -------------------------
 
 if st.sidebar.button("🚀 Predict"):
 
 ```
 input_data = encode()
+
 prediction = model.predict(input_data)
 prob = model.predict_proba(input_data)
 
@@ -91,26 +109,29 @@ with col1:
         st.success("✅ Customer will STAY")
 
 with col2:
-    st.metric("Churn Probability", f"{round(churn_prob,2)} %")
+    st.metric("Churn Probability", f"{round(churn_prob, 2)} %")
 
-# --------------------
-# 📊 BAR CHART
-# --------------------
+# -------------------------
+# Bar Chart
+# -------------------------
+st.subheader("📊 Probability Comparison")
+
 chart_data = pd.DataFrame({
     "Status": ["Stay", "Churn"],
     "Probability": [stay_prob, churn_prob]
 })
+
 st.bar_chart(chart_data.set_index("Status"))
 
-# --------------------
-# 🥧 PIE CHART
-# --------------------
-st.subheader("Probability Distribution")
-st.write(chart_data.set_index("Status"))
+# -------------------------
+# Pie Chart (table view)
+# -------------------------
+st.subheader("🥧 Probability Distribution")
+st.write(chart_data)
 
-# --------------------
-# 🧠 INSIGHTS
-# --------------------
+# -------------------------
+# Insights
+# -------------------------
 st.subheader("🧠 Customer Insights")
 
 insights = []
@@ -130,14 +151,14 @@ if len(insights) == 0:
 for i in insights:
     st.write(i)
 
-# --------------------
-# 📥 DOWNLOAD REPORT
-# --------------------
+# -------------------------
+# Download Report
+# -------------------------
 st.subheader("📥 Download Report")
 
 report = pd.DataFrame({
-    "Prediction": ["Churn" if prediction[0]==1 else "Stay"],
-    "Churn Probability (%)": [round(churn_prob,2)],
+    "Prediction": ["Churn" if prediction[0] == 1 else "Stay"],
+    "Churn Probability (%)": [round(churn_prob, 2)],
     "Tenure": [tenure],
     "Monthly Charges": [MonthlyCharges],
     "Contract": [Contract]
@@ -151,3 +172,4 @@ st.download_button(
     file_name="churn_report.csv",
     mime="text/csv"
 )
+```
