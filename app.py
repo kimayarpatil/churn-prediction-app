@@ -47,30 +47,29 @@ TotalCharges = st.sidebar.number_input("Total Charges", min_value=0.0)
 # Encoding Function
 
 # -------------------------
-
 def encode():
-data = [
-1 if gender == "Male" else 0,
-1 if SeniorCitizen == "Yes" else 0,
-1 if Partner == "Yes" else 0,
-1 if Dependents == "Yes" else 0,
-tenure,
-1 if PhoneService == "Yes" else 0,
-{"No": 0, "Yes": 1, "No phone service": 2}[MultipleLines],
-{"DSL": 0, "Fiber optic": 1, "No": 2}[InternetService],
-{"No": 0, "Yes": 1, "No internet": 2}[OnlineSecurity],
-{"No": 0, "Yes": 1, "No internet": 2}[OnlineBackup],
-{"No": 0, "Yes": 1, "No internet": 2}[DeviceProtection],
-{"No": 0, "Yes": 1, "No internet": 2}[TechSupport],
-{"No": 0, "Yes": 1, "No internet": 2}[StreamingTV],
-{"No": 0, "Yes": 1, "No internet": 2}[StreamingMovies],
-{"Month-to-month": 0, "One year": 1, "Two year": 2}[Contract],
-1 if PaperlessBilling == "Yes" else 0,
-{"Electronic check": 0, "Mailed check": 1, "Bank transfer": 2, "Credit card": 3}[PaymentMethod],
-MonthlyCharges,
-TotalCharges
-]
-return np.array([data])
+    data = [
+        1 if gender == "Male" else 0,
+        1 if SeniorCitizen == "Yes" else 0,
+        1 if Partner == "Yes" else 0,
+        1 if Dependents == "Yes" else 0,
+        tenure,
+        1 if PhoneService == "Yes" else 0,
+        {"No": 0, "Yes": 1, "No phone service": 2}[MultipleLines],
+        {"DSL": 0, "Fiber optic": 1, "No": 2}[InternetService],
+        {"No": 0, "Yes": 1, "No internet": 2}[OnlineSecurity],
+        {"No": 0, "Yes": 1, "No internet": 2}[OnlineBackup],
+        {"No": 0, "Yes": 1, "No internet": 2}[DeviceProtection],
+        {"No": 0, "Yes": 1, "No internet": 2}[TechSupport],
+        {"No": 0, "Yes": 1, "No internet": 2}[StreamingTV],
+        {"No": 0, "Yes": 1, "No internet": 2}[StreamingMovies],
+        {"Month-to-month": 0, "One year": 1, "Two year": 2}[Contract],
+        1 if PaperlessBilling == "Yes" else 0,
+        {"Electronic check": 0, "Mailed check": 1, "Bank transfer": 2, "Credit card": 3}[PaymentMethod],
+        MonthlyCharges,
+        TotalCharges
+    ]
+    return np.array([data])
 
 # -------------------------
 
