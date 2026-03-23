@@ -3,102 +3,188 @@ import pickle
 import numpy as np
 import pandas as pd
 
-# Load model
+# -------------------------
+
+# Load Model
+
+# -------------------------
 
 model = pickle.load(open("model.pkl", "rb"))
 
-# Page config
+# -------------------------
 
-st.set_page_config(page_title="Churn Predictor", layout="wide")
+# Page Config
+
+# -------------------------
+
+st.set_page_config(
+page_title="Churn Predictor",
+layout="wide"
+)
+
+# -------------------------
 
 # Title
 
+# -------------------------
+
 st.title("📊 Customer Churn Prediction Dashboard")
 
+# -------------------------
+
 # Sidebar Inputs
+
+# -------------------------
 
 st.sidebar.header("🧾 Enter Customer Details")
 
 gender = st.sidebar.selectbox("Gender", ["Female", "Male"])
-SeniorCitizen = st.sidebar.selectbox("Senior Citizen", ["No", "Yes"])
-Partner = st.sidebar.selectbox("Has Partner", ["No", "Yes"])
-Dependents = st.sidebar.selectbox("Dependents", ["No", "Yes"])
+senior_citizen = st.sidebar.selectbox("Senior Citizen", ["No", "Yes"])
+partner = st.sidebar.selectbox("Has Partner", ["No", "Yes"])
+dependents = st.sidebar.selectbox("Dependents", ["No", "Yes"])
+
 tenure = st.sidebar.slider("Tenure (Months)", 0, 72)
-PhoneService = st.sidebar.selectbox("Phone Service", ["No", "Yes"])
-MultipleLines = st.sidebar.selectbox("Multiple Lines", ["No", "Yes", "No phone service"])
-InternetService = st.sidebar.selectbox("Internet Service", ["DSL", "Fiber optic", "No"])
-OnlineSecurity = st.sidebar.selectbox("Online Security", ["No", "Yes", "No internet"])
-OnlineBackup = st.sidebar.selectbox("Online Backup", ["No", "Yes", "No internet"])
-DeviceProtection = st.sidebar.selectbox("Device Protection", ["No", "Yes", "No internet"])
-TechSupport = st.sidebar.selectbox("Tech Support", ["No", "Yes", "No internet"])
-StreamingTV = st.sidebar.selectbox("Streaming TV", ["No", "Yes", "No internet"])
-StreamingMovies = st.sidebar.selectbox("Streaming Movies", ["No", "Yes", "No internet"])
-Contract = st.sidebar.selectbox("Contract Type", ["Month-to-month", "One year", "Two year"])
-PaperlessBilling = st.sidebar.selectbox("Paperless Billing", ["No", "Yes"])
-PaymentMethod = st.sidebar.selectbox(
+
+phone_service = st.sidebar.selectbox("Phone Service", ["No", "Yes"])
+multiple_lines = st.sidebar.selectbox(
+"Multiple Lines",
+["No", "Yes", "No phone service"]
+)
+
+internet_service = st.sidebar.selectbox(
+"Internet Service",
+["DSL", "Fiber optic", "No"]
+)
+
+online_security = st.sidebar.selectbox(
+"Online Security",
+["No", "Yes", "No internet"]
+)
+
+online_backup = st.sidebar.selectbox(
+"Online Backup",
+["No", "Yes", "No internet"]
+)
+
+device_protection = st.sidebar.selectbox(
+"Device Protection",
+["No", "Yes", "No internet"]
+)
+
+tech_support = st.sidebar.selectbox(
+"Tech Support",
+["No", "Yes", "No internet"]
+)
+
+streaming_tv = st.sidebar.selectbox(
+"Streaming TV",
+["No", "Yes", "No internet"]
+)
+
+streaming_movies = st.sidebar.selectbox(
+"Streaming Movies",
+["No", "Yes", "No internet"]
+)
+
+contract = st.sidebar.selectbox(
+"Contract Type",
+["Month-to-month", "One year", "Two year"]
+)
+
+paperless_billing = st.sidebar.selectbox(
+"Paperless Billing",
+["No", "Yes"]
+)
+
+payment_method = st.sidebar.selectbox(
 "Payment Method",
 ["Electronic check", "Mailed check", "Bank transfer", "Credit card"]
 )
-MonthlyCharges = st.sidebar.number_input("Monthly Charges", min_value=0.0)
-TotalCharges = st.sidebar.number_input("Total Charges", min_value=0.0)
+
+monthly_charges = st.sidebar.number_input(
+"Monthly Charges",
+min_value=0.0
+)
+
+total_charges = st.sidebar.number_input(
+"Total Charges",
+min_value=0.0
+)
 
 # -------------------------
 
 # Encoding Function
 
 # -------------------------
+
 def encode():
-    data = [
-        1 if gender == "Male" else 0,
-        1 if SeniorCitizen == "Yes" else 0,
-        1 if Partner == "Yes" else 0,
-        1 if Dependents == "Yes" else 0,
-        tenure,
-        1 if PhoneService == "Yes" else 0,
-        {"No": 0, "Yes": 1, "No phone service": 2}[MultipleLines],
-        {"DSL": 0, "Fiber optic": 1, "No": 2}[InternetService],
-        {"No": 0, "Yes": 1, "No internet": 2}[OnlineSecurity],
-        {"No": 0, "Yes": 1, "No internet": 2}[OnlineBackup],
-        {"No": 0, "Yes": 1, "No internet": 2}[DeviceProtection],
-        {"No": 0, "Yes": 1, "No internet": 2}[TechSupport],
-        {"No": 0, "Yes": 1, "No internet": 2}[StreamingTV],
-        {"No": 0, "Yes": 1, "No internet": 2}[StreamingMovies],
-        {"Month-to-month": 0, "One year": 1, "Two year": 2}[Contract],
-        1 if PaperlessBilling == "Yes" else 0,
-        {"Electronic check": 0, "Mailed check": 1, "Bank transfer": 2, "Credit card": 3}[PaymentMethod],
-        MonthlyCharges,
-        TotalCharges
-    ]
-    return np.array([data])
+data = [
+1 if gender == "Male" else 0,
+1 if senior_citizen == "Yes" else 0,
+1 if partner == "Yes" else 0,
+1 if dependents == "Yes" else 0,
+tenure,
+1 if phone_service == "Yes" else 0,
+{"No": 0, "Yes": 1, "No phone service": 2}[multiple_lines],
+{"DSL": 0, "Fiber optic": 1, "No": 2}[internet_service],
+{"No": 0, "Yes": 1, "No internet": 2}[online_security],
+{"No": 0, "Yes": 1, "No internet": 2}[online_backup],
+{"No": 0, "Yes": 1, "No internet": 2}[device_protection],
+{"No": 0, "Yes": 1, "No internet": 2}[tech_support],
+{"No": 0, "Yes": 1, "No internet": 2}[streaming_tv],
+{"No": 0, "Yes": 1, "No internet": 2}[streaming_movies],
+{"Month-to-month": 0, "One year": 1, "Two year": 2}[contract],
+1 if paperless_billing == "Yes" else 0,
+{
+"Electronic check": 0,
+"Mailed check": 1,
+"Bank transfer": 2,
+"Credit card": 3
+}[payment_method],
+monthly_charges,
+total_charges
+]
+
+
+return np.array([data])
+
 
 # -------------------------
 
 # Prediction
 
 # -------------------------
+
 if st.sidebar.button("🚀 Predict"):
 
-    input_data = encode()
+input_data = encode()
 
-    prediction = model.predict(input_data)
-    prob = model.predict_proba(input_data)
+prediction = model.predict(input_data)
+probabilities = model.predict_proba(input_data)
 
-    churn_prob = prob[0][1] * 100
-    stay_prob = prob[0][0] * 100
+churn_prob = probabilities[0][1] * 100
+stay_prob = probabilities[0][0] * 100
 
-    st.subheader("📊 Prediction Result")
+st.subheader("📊 Prediction Result")
 
-    col1, col2 = st.columns(2)
+col1, col2 = st.columns(2)
 
-    with col1:
-        if prediction[0] == 1:
-            st.error("⚠️ Customer is likely to CHURN")
-        else:
-            st.success("✅ Customer will STAY")
+with col1:
+    if prediction[0] == 1:
+        st.error("⚠️ Customer is likely to CHURN")
+    else:
+        st.success("✅ Customer will STAY")
 
-    with col2:
-        st.metric("Churn Probability", f"{round(churn_prob, 2)} %")
+with col2:
+    st.metric(
+        "Churn Probability",
+        f"{round(churn_prob, 2)} %"
+    )
+
+
+# -------------------------
 # Chart
+# -------------------------
 st.subheader("📊 Probability Comparison")
 
 chart_data = pd.DataFrame({
@@ -108,39 +194,55 @@ chart_data = pd.DataFrame({
 
 st.bar_chart(chart_data.set_index("Status"))
 
+
+# -------------------------
 # Table
+# -------------------------
 st.subheader("🥧 Probability Distribution")
 st.write(chart_data)
 
+
+# -------------------------
 # Insights
+# -------------------------
 st.subheader("🧠 Customer Insights")
 
 insights = []
 
 if tenure < 12:
     insights.append("⚠️ New customers are more likely to churn")
-if MonthlyCharges > 70:
+
+if monthly_charges > 70:
     insights.append("💸 High monthly charges increase churn risk")
-if Contract == "Month-to-month":
+
+if contract == "Month-to-month":
     insights.append("📉 Month-to-month contracts have higher churn")
-if TechSupport == "No":
+
+if tech_support == "No":
     insights.append("🛠️ Lack of tech support increases churn")
 
-if len(insights) == 0:
+if not insights:
     insights.append("✅ Customer profile looks stable")
 
-for i in insights:
-    st.write(i)
+for insight in insights:
+    st.write(insight)
 
-# Download
+
+# -------------------------
+# Download Report
+# -------------------------
 st.subheader("📥 Download Report")
 
 report = pd.DataFrame({
-    "Prediction": ["Churn" if prediction[0] == 1 else "Stay"],
-    "Churn Probability (%)": [round(churn_prob, 2)],
+    "Prediction": [
+        "Churn" if prediction[0] == 1 else "Stay"
+    ],
+    "Churn Probability (%)": [
+        round(churn_prob, 2)
+    ],
     "Tenure": [tenure],
-    "Monthly Charges": [MonthlyCharges],
-    "Contract": [Contract]
+    "Monthly Charges": [monthly_charges],
+    "Contract": [contract]
 })
 
 csv = report.to_csv(index=False).encode("utf-8")
