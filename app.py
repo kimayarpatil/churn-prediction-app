@@ -79,7 +79,6 @@ def encode():
 
 if st.sidebar.button("🚀 Predict"):
 
-```
 input_data = encode()
 
 prediction = model.predict(input_data)
@@ -154,4 +153,3 @@ st.download_button(
     file_name="churn_report.csv",
     mime="text/csv"
 )
-```
