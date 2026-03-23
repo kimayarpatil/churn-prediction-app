@@ -1,4 +1,3 @@
-```python
 import streamlit as st
 import pickle
 import numpy as np
@@ -39,4 +38,3 @@ if st.sidebar.button("Predict"):
 # Footer
 st.markdown("---")
 st.caption("Built using Streamlit 🚀")
-```
