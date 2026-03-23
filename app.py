@@ -58,8 +58,9 @@ TotalCharges = st.sidebar.number_input("Total Charges", min_value=0.0)
 
 # -------------------------
 
+#def encode():
 def encode():
-return np.array([[
+data = [
 1 if gender == "Male" else 0,
 1 if SeniorCitizen == "Yes" else 0,
 1 if Partner == "Yes" else 0,
@@ -79,7 +80,10 @@ tenure,
 {"Electronic check": 0, "Mailed check": 1, "Bank transfer": 2, "Credit card": 3}[PaymentMethod],
 MonthlyCharges,
 TotalCharges
-]])
+]
+
+return np.array([data])
+
 
 # -------------------------
 
@@ -172,4 +176,3 @@ st.download_button(
     file_name="churn_report.csv",
     mime="text/csv"
 )
-```
