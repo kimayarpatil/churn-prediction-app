@@ -76,30 +76,28 @@ def encode():
 # Prediction
 
 # -------------------------
-
 if st.sidebar.button("🚀 Predict"):
 
-input_data = encode()
+    input_data = encode()
 
-prediction = model.predict(input_data)
-prob = model.predict_proba(input_data)
+    prediction = model.predict(input_data)
+    prob = model.predict_proba(input_data)
 
-churn_prob = prob[0][1] * 100
-stay_prob = prob[0][0] * 100
+    churn_prob = prob[0][1] * 100
+    stay_prob = prob[0][0] * 100
 
-st.subheader("📊 Prediction Result")
+    st.subheader("📊 Prediction Result")
 
-col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
-with col1:
-    if prediction[0] == 1:
-        st.error("⚠️ Customer is likely to CHURN")
-    else:
-        st.success("✅ Customer will STAY")
+    with col1:
+        if prediction[0] == 1:
+            st.error("⚠️ Customer is likely to CHURN")
+        else:
+            st.success("✅ Customer will STAY")
 
-with col2:
-    st.metric("Churn Probability", f"{round(churn_prob, 2)} %")
-
+    with col2:
+        st.metric("Churn Probability", f"{round(churn_prob, 2)} %")
 # Chart
 st.subheader("📊 Probability Comparison")
 
